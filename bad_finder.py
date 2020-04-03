@@ -203,7 +203,7 @@ def check_book(pages_of_book, pages):
         if page in pages:
             check_links_on_page(pages[page], pages)
         else:
-            print('Couldn\'t find page "{}" inside the page cache.')
+            print('Couldn\'t find page "{}" inside the page cache.'.format(page))
 
 def main():
     """Main function when called from command line."""
