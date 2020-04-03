@@ -6,7 +6,6 @@ from bs4 import BeautifulSoup
 
 EXCLUDED_HEADING_IDS = (
     'Buchanfänge',
-    'Mitmachen_für_(Nicht-)Freaks',
     'Über_das_Projekt'
 )
 
@@ -198,6 +197,14 @@ def yes_no_prompt(prompt, default=None):
             return default
         print("Please answer 'y' or 'n'.")
 
+def check_book(pages_of_book, pages):
+    """Check all pages of the given article list"""
+    for page in pages_of_book:
+        if page in pages:
+            check_links_on_page(pages[page], pages)
+        else:
+            print('Couldn\'t find page "{}" inside the page cache.')
+
 def main():
     """Main function when called from command line."""
     if yes_no_prompt("(Re)Build cached data?", False):
@@ -223,8 +230,7 @@ def main():
 
     for book in books_to_check:
         print('Checking book "{}":'.format(book))
-        for page in books[book]:
-            check_links_on_page(page, pages)
+        check_book(books[book], pages)
 
 if __name__ == '__main__':
     main()
