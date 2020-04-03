@@ -24,6 +24,15 @@ repository.
 This script does not check links to external websites and links pointing to
 an acrticle which is not listed in the sitemap.
 
+## Logging data
+All bad links found by this script are logged to a csv file called
+`bad_log.csv` for later analysis. This csv file has the following columns:
+ - book: The book the page source is in.
+ - source: The page on which the bad link appeared.
+ - target: The page the bad link is pointing to.
+ - id: The refereced Anker (or blank if none)
+ - reason: The reason for this link to be logged.
+
 ## Idea
 Fetch all articles from the sitemap and download them. Then scan each for
 links and check if the target id exists on the target page using the already

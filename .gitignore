@@ -131,5 +131,8 @@ dmypy.json
 # Cache file of the script
 cache.db
 
+# Log file of the script
+bad_log.csv
+
 # Ignore backup files
 *~
