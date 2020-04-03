@@ -42,9 +42,11 @@ def clean_urls(url_list):
 def find_links(bs_obj, warn_redlinks=True):
     """Find all href-tags inside the given bs_obj."""
     # Regex to filter nonexistent pages and edit links
-    existence_regex = re.compile('\\?(?:.+&)action=edit(?:&|$)')
+    existence_regex = re.compile('\\?(?:.+&)?action=edit(?:&|$)')
     # Regex to filter nonexistent pages
-    redlink_regex = re.compile('\\?(?:.+&)redlink=1(?:&|$)')
+    redlink_regex = re.compile('\\?(?:.+&)?redlink=1(?:&|$)')
+    # Regex to ignore Discussion and User pages
+    link_ignore_regex = re.compile('\\?(.+&)?title=(?:Diskussion|Benutzer)')
     link_objects = bs_obj.find_all('a')
     links = []
     for link_object in link_objects:
@@ -53,7 +55,7 @@ def find_links(bs_obj, warn_redlinks=True):
         if not link:
             continue
         if existence_regex.search(link):
-            if redlink_regex.search(link) and warn_redlinks:
+            if redlink_regex.search(link) and warn_redlinks and not link_ignore_regex.search(link):
                 print('Found link pointing to nonexistent page: {}'.format(link))
             continue
         links.append(link)
