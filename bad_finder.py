@@ -228,6 +228,9 @@ def check_book(pages_of_book, pages):
     """Check all pages of the given article list"""
     bad_book_links = []
     for page in pages_of_book:
+        # Ignore MediaWiki speacial pages
+        if page.startswith('/wiki/Spezial:'):
+            continue
         if page in pages:
             bad_links = check_links_on_page(pages[page], pages)
             for link_data in bad_links:
