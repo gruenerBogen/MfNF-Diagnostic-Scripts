@@ -14,6 +14,9 @@ This searches all books it finds in the sitemap and stores the downloaded data
 in the file `cache.db`. If you don't want the cache, remove the argument `-c
 cache.db` from the prompt.
 
+If you desire more information, have a look at the manpage in the folder
+`doc`.
+
 ## What this checks
 For each link in a "Mathe für Nicht-Freaks" article the following two
 conditions are checked:

@@ -1,0 +1,73 @@
+= bad_finder(1)
+:version: v0.0.1
+:date: 20 March 2021
+:data-uri:
+:doctype: manpage
+:lang: en
+
+== Name
+bad_finder - scan the Mathe fuer Nicht-Freaks project for broken internal
+links
+
+== Synopsis
+*python3 bad_finder.py* [_options_] [_<logfile.csv>_]
+
+== Description
+The script bad_finder searches all pages linked in the sitemap of the Mathe
+fuer Nicht-Freaks project for broken internal links. For this the sitemap and
+all articles linked there are downloaded or read from cache. For more
+information on caching see the option *-c* for details.
+
+For each link in a "Mathe fuer Nicht-Freaks" article, the following two
+conditions are checked:
+
+. The linked page exists.
+. If there is a `#` inside the link, there is a tag on the target page having
+  the specified id.
+
+If any of these conditions is violated, a message regarding the violation is
+printed to standard output. The violations are logged to _<logfile.csv>_. When
+_<logfile.csv>_ is not specified, they will be logged to `bad_log.csv`. See
+<<_logging>> for details.
+
+This script does not check links to external websites and links pointing to
+an acrticle which is not listed in the sitemap.
+
+== Options
+-c <cache file>::
+Cache the downloaded information in the cache file. When the cache file
+already exists, no information is downloaded and the content of the cache file
+is used as information instead. To force a rebuild of the cache use the option
+*-r*. The cache is stored as a sqlite database.
+
+-r::
+Rebuild the cache. Only works in conjunction with the optino *-c*.
+
+-l::
+Output all books which were found in the sitemap and perform no analysis.
+
+-b book name::
+Only analyse the book with the specified name. Without this argument, all
+available books will be analysed.
+
+== Idea
+Fetch all articles from the sitemap and download them. Then scan each for
+links and check if the target id exists on the target page using the already
+downloaded pages. As Wikibooks automatically marks nonexistent pages by the
+GET-parameter `redlink=1`, this is used to check for nonexistent pages.
+
+== Logging
+When _<logfile.csv>_ is specified, all bad links found by this script are
+logged to this file in csv-format for later analysis. Otherwise they will be
+logged to the file *bad_log.csv*. The generated csv file has the following
+columns:
+
+* book: The book the page source is in.
+* source: The page on which the bad link appeared.
+* target: The page the bad link is pointing to.
+* id: The refereced Anker (or blank if none)
+* reason: The reason this link got logged.
+
+== Bugs
+If you find bugs, please report them at
+https://github.com/gruenerBogen/MfNF-Bad-Anker-Finder/issues.

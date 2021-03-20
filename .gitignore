@@ -136,3 +136,6 @@ bad_log.csv
 
 # Ignore backup files
 *~
+
+# Generated manpages
+*.gz
