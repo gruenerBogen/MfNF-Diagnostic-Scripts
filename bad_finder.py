@@ -1,8 +1,9 @@
 """
-This is a module for checking links in the Mathe für Nicht-Freaks Wikibooks Project
+This is a module for checking links in the Mathe für Nicht-Freaks Wikibooks
+project.
 
-Ran as a standalone script this creates prompts for the information it needs in order
-to check the links.
+Ran as a standalone script this creates prompts for the information it needs in
+order to check the links.
 """
 
 import urllib.request
@@ -18,12 +19,14 @@ EXCLUDED_HEADING_IDS = (
     'Über_das_Projekt'
 )
 
+
 def is_heading_excluded(heading):
     """Check whether a heading should be exluded from processing."""
     for identifier in EXCLUDED_HEADING_IDS:
         if heading.find(id=identifier):
             return True
     return False
+
 
 def get_content_till_tag(start_tag, end_tag=None):
     """
@@ -37,9 +40,11 @@ def get_content_till_tag(start_tag, end_tag=None):
         current_tag = current_tag.next_sibling
     return content
 
+
 def get_heading_id(heading):
     """Get the MfNF generated ID belongig to a heading."""
     return heading.find('span', 'mw-headline').get('id')
+
 
 def clean_urls(url_list):
     """Remove the position on the page the link points to."""
@@ -48,10 +53,12 @@ def clean_urls(url_list):
         url_list[i] = clean_regex.sub('', url_list[i])
     return url_list
 
+
 def find_links(bs_obj, warn_redlinks=True):
     """
     Find all href-tags inside the given bs_obj.
-    If warn_redlinks=True this prints a warning message for every redlink it encounters.
+    If warn_redlinks=True this prints a warning message for every redlink it
+    encounters.
     """
     # Regex to filter nonexistent pages and edit links
     existence_regex = re.compile('\\?(?:.+&)?action=edit(?:&|$)')
@@ -68,12 +75,14 @@ def find_links(bs_obj, warn_redlinks=True):
         if not link:
             continue
         if existence_regex.search(link):
-            if redlink_regex.search(link) and warn_redlinks and not link_ignore_regex.search(link):
+            if redlink_regex.search(link) and warn_redlinks and \
+               not link_ignore_regex.search(link):
                 print('Found link pointing to nonexistent page: {}'.format(link))
                 redlinks.append(link)
             continue
         links.append(link)
     return links, redlinks
+
 
 def fetch_article_list():
     """Download the sitemap and extract all links from it"""
@@ -82,7 +91,8 @@ def fetch_article_list():
             'https://de.wikibooks.org/w/index.php?title=Mathe_f%C3%BCr_Nicht-Freaks:_Sitemap') \
             as response:
         sitemap = BeautifulSoup(response.read(), "html.parser")
-        # Get all headings, the first result is dropped as it is the table of contents.
+        # Get all headings, the first result is dropped as it is the table of
+        # contents.
         # The last result is a mysterious "Navigationsmenü".
         headings = sitemap.find_all('h2')[1:-1]
         books = {}
@@ -91,14 +101,16 @@ def fetch_article_list():
                 continue
             # fetch content of heading
             books[get_heading_id(headings[i])] = clean_urls(find_links(
-                BeautifulSoup(get_content_till_tag(headings[i], headings[i+1]), 'html.parser'),
+                BeautifulSoup(get_content_till_tag(headings[i], headings[i+1]),
+                              'html.parser'),
                 False)[0])
         return books
 
+
 def fetch_pages_from_list(page_urls):
     """
-    Fetch every url in page_urls and store the results as BeautifulSoup object in a
-    dictionary, which is indexed by the urls.
+    Fetch every url in page_urls and store the results as BeautifulSoup object
+    in a dictionary, which is indexed by the urls.
     """
     page_content = {}
     external_link_regex = re.compile('^https?://')
@@ -107,23 +119,26 @@ def fetch_pages_from_list(page_urls):
         if external_link_regex.match(url):
             continue
         print("Fetchning: {}".format(url))
-        with urllib.request.urlopen('https://de.wikibooks.org{}'.format(url)) as response:
+        with urllib.request.urlopen('https://de.wikibooks.org{}'.format(url)) \
+             as response:
             page = BeautifulSoup(response.read(), "html.parser")
             page_content[url] = page
     return page_content
+
 
 def check_links_on_page(page, page_dict):
     """This taks a BeautifulSoup object and checks if all links on it exist."""
     # Create a copy of the page as we are going to remove stuff from it
     page = BeautifulSoup(str(page), 'html.parser')
     # Remove Serlo head since it contains parts of the sitemap
-    # We don't wan't to check the links in there. They all exist or provide unnecessary
-    # redlink warnings.
+    # We don't wan't to check the links in there. They all exist or provide
+    # unnecessary redlink warnings.
     serlo_header = page.find(id='serlo-header')
     if serlo_header is not None:
         serlo_header.extract()
     links, redlinks = find_links(page, warn_redlinks=True)
-    bad_links = [{'target': link, 'id': '', 'reason': 'Redlink'} for link in redlinks]
+    bad_links = [{'target': link, 'id': '', 'reason': 'Redlink'}
+                 for link in redlinks]
     for link in links:
         # Ignore external links
         if not link.startswith('/'):
@@ -145,7 +160,8 @@ def check_links_on_page(page, page_dict):
         target_page = page_dict[linked_page]
         if not target_page.find(id=linked_id):
             print('Found a link from "{}" to "{}". On the target page the id "{}" is not present.'.
-                  format(page.title.get_text(), target_page.title.get_text(), linked_id))
+                  format(page.title.get_text(), target_page.title.get_text(),
+                         linked_id))
             bad_links.append({
                 'target': linked_page,
                 'id': linked_id,
@@ -153,9 +169,11 @@ def check_links_on_page(page, page_dict):
             })
     return bad_links
 
+
 def yes_no_prompt(prompt, default=None):
     """
-    Asks Yes/No Question. If default is not None an empty answer will yield this as a return value.
+    Asks Yes/No Question. If default is not None an empty answer will yield
+    this as a return value.
     """
     if default is None:
         prompt += " [y/n] "
@@ -172,6 +190,7 @@ def yes_no_prompt(prompt, default=None):
         if answer == "" and default is not None:
             return default
         print("Please answer 'y' or 'n'.")
+
 
 def check_book(pages_of_book, pages):
     """Check all pages of the given article list"""
@@ -193,6 +212,7 @@ def check_book(pages_of_book, pages):
                 'reason': 'Page not in cache'
             })
     return bad_book_links
+
 
 def main():
     """Main function when called from command line."""
@@ -230,6 +250,7 @@ def main():
             bad_data = check_book(books[book], pages)
             for datum in bad_data:
                 log_writer.writerow({'book': book, **datum})
+
 
 if __name__ == '__main__':
     main()
