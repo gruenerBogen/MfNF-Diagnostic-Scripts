@@ -5,12 +5,13 @@ Ran as a standalone script this creates prompts for the information it needs in 
 to check the links.
 """
 
-import sqlite3
 import urllib.request
 import re
 import csv
 
 from bs4 import BeautifulSoup
+
+from util import site_caching
 
 EXCLUDED_HEADING_IDS = (
     'Buchanfänge',
@@ -152,58 +153,6 @@ def check_links_on_page(page, page_dict):
             })
     return bad_links
 
-# Chaching
-def reset_cache_db(db_connection):
-    """Reset the cache database or set it up if there isn't anything there yet."""
-    with db_connection:
-        db_connection.execute('DROP TABLE IF EXISTS books')
-        db_connection.execute('DROP TABLE IF EXISTS pages')
-        db_connection.execute('CREATE TABLE books (name TEXT, page_url TEXT)')
-        db_connection.execute(
-            'CREATE TABLE pages (url TEXT PRIMARY KEY ON CONFLICT REPLACE, content TEXT)')
-
-def cache_page_data(books, page_urls):
-    """
-    Save the given books and page_urls in the cache database.
-    WARNING: This destroys all other cached data.
-    """
-    db_connection = sqlite3.connect('cache.db')
-    reset_cache_db(db_connection)
-    # insert books into cache
-    with db_connection:
-        for book in books:
-            for page in books[book]:
-                db_connection.execute('INSERT INTO books(name, page_url) VALUES (?, ?)',
-                                      (book, page))
-    # insert pages
-    with db_connection:
-        for page_url in page_urls:
-            db_connection.execute('INSERT INTO pages(url, content) VALUES (?, ?)',
-                                  (page_url, str(page_urls[page_url])))
-    db_connection.close()
-
-def read_cached_data():
-    """
-    Load cached books and pages.
-    Returns these dictionaries as a pair (books, pages).
-    """
-    db_connection = sqlite3.connect('cache.db')
-    cursor = db_connection.execute('SELECT name, page_url FROM books')
-    # Read books
-    books = {}
-    for row in cursor:
-        if row[0] in books:
-            books[row[0]].append(row[1])
-        else:
-            books[row[0]] = [row[1]]
-    # Read pages
-    cursor = db_connection.execute('SELECT url, content FROM pages')
-    pages = {}
-    for row in cursor:
-        pages[row[0]] = BeautifulSoup(row[1], "html.parser")
-    db_connection.close()
-    return (books, pages)
-
 def yes_no_prompt(prompt, default=None):
     """
     Asks Yes/No Question. If default is not None an empty answer will yield this as a return value.
@@ -247,14 +196,18 @@ def check_book(pages_of_book, pages):
 
 def main():
     """Main function when called from command line."""
+    def postprocess_page(string):
+        return BeautifulSoup(string, "html.parser")
+
     if yes_no_prompt("(Re)Build cached data?", False):
         books = fetch_article_list()
         pages = {}
         for book in books:
             pages = {**pages, **fetch_pages_from_list(books[book])}
-        cache_page_data(books, pages)
+        site_caching.cache_page_data(books, pages)
     else:
-        (books, pages) = read_cached_data()
+        (books, pages) = site_caching.read_cached_data(
+            page_postprocessor=postprocess_page)
     print("We have the following Books to check:")
     for book in books:
         print(book)
