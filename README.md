@@ -5,8 +5,14 @@ Nicht-Freaks"](https://de.wikibooks.org/wiki/Mathe_f%C3%BCr_Nicht-Freaks)
 project.
 
 ## Usage
-Just run the script `bad_finder.py` via command line and python3. It prompts
-for all information it needs.
+There are numerous command line options, which are not really documented right
+now. A good base is the following command prompt:
+```
+python3 bad_finder.py -c cache.db
+```
+This searches all books it finds in the sitemap and stores the downloaded data
+in the file `cache.db`. If you don't want the cache, remove the argument `-c
+cache.db` from the prompt.
 
 ## What this checks
 For each link in a "Mathe für Nicht-Freaks" article the following two

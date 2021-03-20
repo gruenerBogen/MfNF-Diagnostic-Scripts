@@ -6,7 +6,10 @@ Ran as a standalone script this creates prompts for the information it needs in
 order to check the links.
 """
 
+import os.path
+import sys
 import csv
+import getopt
 
 from bs4 import BeautifulSoup
 
@@ -111,7 +114,13 @@ def main():
     def postprocess_page(string):
         return BeautifulSoup(string, "html.parser")
 
-    if yes_no_prompt("(Re)Build cached data?", False):
+    (opts_list, args) = getopt.getopt(sys.argv[1:], 'c:rlb:')
+    opts = dict(opts_list)
+
+    if '-c' in opts and os.path.isfile(opts['-c']) and '-r' not in opts:
+        (books, pages) = site_caching.read_cached_data(
+            page_postprocessor=postprocess_page)
+    else:
         books = bookinfo.fetch_article_list()
         pages = {}
         for book in books:
@@ -120,24 +129,29 @@ def main():
                 **bookinfo.fetch_pages_from_list(
                     books[book], page_postprocessor=postprocess_page)
             }
-        site_caching.cache_page_data(books, pages)
-    else:
-        (books, pages) = site_caching.read_cached_data(
-            page_postprocessor=postprocess_page)
-    print("We have the following Books to check:")
-    for book in books:
-        print(book)
-    books_to_check = []
-    while not books_to_check:
-        book_to_check = input("Which book do you want to check? (book name or all) ")
-        if book_to_check == 'all':
-            books_to_check = books.keys()
-        elif book_to_check in books:
-            books_to_check = [book_to_check]
-        else:
-            print('Please choose a book from the list above or all.')
+        if '-c' in opts:
+            site_caching.cache_page_data(books, pages, cache=opts['-c'])
 
-    with open('bad_log.csv', 'w', newline='') as csv_logfile:
+    if '-l' in opts:
+        print("The follwing books are available:")
+        for book in books:
+            print(book)
+        sys.exit(0)
+
+    books_to_check = []
+    if '-b' in opts:
+        if opts['-b'] in books:
+            books_to_check = [opts['-b']]
+        else:
+            print('The book "{}" is not available.'.format(opts['-b']))
+            sys.exit(1)
+    else:
+        books_to_check = books.keys()
+
+    logfile = 'bad_log.csv'
+    if len(args) >= 1:
+        logfile = args[0]
+    with open(logfile, 'w', newline='') as csv_logfile:
         fieldnames = ['book', 'source', 'target', 'id', 'reason']
         log_writer = csv.DictWriter(csv_logfile, fieldnames=fieldnames)
         log_writer.writeheader()
