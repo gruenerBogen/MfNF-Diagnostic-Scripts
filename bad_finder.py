@@ -119,6 +119,7 @@ def main():
 
     if '-c' in opts and os.path.isfile(opts['-c']) and '-r' not in opts:
         (books, pages) = site_caching.read_cached_data(
+            cache=opts['-c'],
             page_postprocessor=postprocess_page)
     else:
         books = bookinfo.fetch_article_list()
