@@ -1,50 +1,27 @@
 = MfNF-Diagnostic-Scripts
 
-A script to check for bad links in the
-https://de.wikibooks.org/wiki/Mathe_f%C3%BCr_Nicht-Freaks["Mathe für
-Nicht-Freaks"] project.
+Scripts to aggregate information on the articles of the
+https://de.wikibooks.org/wiki/Mathe_f%C3%BCr_Nicht-Freaks[Mathe für
+Nicht-Freaks] project.
 
-== Usage
-There are numerous command line options, which are not really documented right
-now. A good base is the following command prompt:
+== Scripts
+Currently there are two diagnostic scripts: `bad_finder.py` and
+`tex_macro_finder.py`.
+
+* *bad_finder.py*: Find broken links and ankers on the Mathe für Nicht-Freaks
+   project.
+* *tex_macro_finder.py*: Collect a list of all TeX-macros used in math
+  environments on the Mathe für Nicht-Freaks project.
+
+If you can't be bothered to read the documentation (see below), you can just
+run the script with python3. That is run
 
 [source,bash]
-python3 bad_finder.py -c cache.db
+python3 <script_name>
 
-This searches all books it finds in the sitemap and stores the downloaded data
-in the file `cache.db`. If you don't want the cache, remove the argument `-c
-cache.db` from the prompt.
+They have decent defaults. But if you want to use caching or comfortably store
+information elsewhere, you should take a brief look at the documentation.
 
-If you desire more information, have a look at the manpage in the folder
-`doc`.
-
-== What this checks
-For each link in a "Mathe für Nicht-Freaks" article the following two
-conditions are checked:
-
-. The linked page exists.
-. If there is a `#` inside the link, there is a tag on the target page having
-  the specified id.
-
-If any of these conditions is violated, a message regarding the violation is
-printed to standard output. The id in the second condition is usually
-generated using the Anker-Template from Wikibooks – hence the name of the
-repository.
-
-This script does not check links to external websites and links pointing to
-an acrticle which is not listed in the sitemap.
-
-== Logging data
-All bad links found by this script are logged to a csv file called
-`bad_log.csv` for later analysis. This csv file has the following columns:
- - book: The book the page source is in.
- - source: The page on which the bad link appeared.
- - target: The page the bad link is pointing to.
- - id: The refereced Anker (or blank if none)
- - reason: The reason for this link to be logged.
-
-== Idea
-Fetch all articles from the sitemap and download them. Then scan each for
-links and check if the target id exists on the target page using the already
-downloaded pages. As Wikibooks automatically marks nonexistent pages by the
-GET-parameter `redlink=1`, this is used to check for nonexistent pages.
+== Where can I get more information on the scripts?
+Check the folder `doc`. You will find manpages for the individual scripts
+there.

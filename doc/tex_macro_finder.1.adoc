@@ -1,0 +1,43 @@
+= tex_macro_finder(1)
+:version: v0.0.1
+:date: 20 March 2021
+:data-uri:
+:doctype: manpage
+:lang: en
+
+== Name
+tex_macro_finder - find the TeX macros used in the Mathe fuer Nicht-Freaks
+project
+
+== Synopsis
+*python3 tex_macro_finder* [_options_]
+
+== Description
+The script tex_macro_finder searches all articles in the sitemap of the Mathe
+fuer Nicht-Freaks project for TeX macros inside math environments. For this
+the sitemap and all articles as raw WikiText linked there are downloaded or
+read from cache. For more information on caching see the option *-c* for
+details.
+
+After processing an unordered list of all used TeX macros is printed to
+standard output and, when requested using *-o*, to a separate file. Piping is
+not really possible as this for example prints debug information about
+downloaded files. Hence the option *-o*.
+
+== Options
+-c <cache file>::
+Cache the downloaded information in the cache file. When the cache file
+already exists, no information is downloaded and the content of the cache file
+is used as information instead. To force a rebuild of the cache use the option
+*-r*. The cache is stored as a sqlite database.
+
+-r::
+Rebuild the cache. Only works in conjunction with the option *-c*.
+
+-o <filename>::
+Write the TeX-macros to _<filename>_. They will still be printed to the
+console.
+
+== Bugs
+If you find bugs, please report them at
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues.
