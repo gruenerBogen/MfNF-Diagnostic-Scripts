@@ -70,4 +70,4 @@ columns:
 
 == Bugs
 If you find bugs, please report them at
-https://github.com/gruenerBogen/MfNF-Bad-Anker-Finder/issues.
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues.
