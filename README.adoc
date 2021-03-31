@@ -10,6 +10,8 @@ Currently there are two diagnostic scripts: `bad_finder.py` and
 
 * *bad_finder.py*: Find broken links and ankers on the Mathe für Nicht-Freaks
    project.
+* *boxen_finder.py*: Analyse the usage of te custom templates on the Mathe für
+   Nicht-Freaks project.
 * *tex_macro_finder.py*: Collect a list of all TeX-macros used in math
   environments on the Mathe für Nicht-Freaks project.
 

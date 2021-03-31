@@ -1,0 +1,48 @@
+= boxen_finder(1)
+:version: v0.0.1
+:date: 20 March 2021
+:data-uri:
+:doctype: manpage
+:lang: en
+
+== Name
+boxen_finder - analyse custom template useage on the Mathe fuer Nicht-Freaks
+project.
+
+== Synopsis
+*python3 boxen_finder.py* [_options_]
+
+== Description
+The script boxen_finder searches all articles linked in the sitemap of the
+Mathe fuer Nicht-Freaks project for the use of custom templates. These Are
+templates starting with *:Mathe fuer Nicht-Freaks: Vorlage:*. For this
+the sitemap and all articles as raw WikiText linked there are downloaded or
+read from cache. For more information on caching see the option *-c* for
+details.
+
+After processing an alphabetically sorted list of all used custom templates
+together with the number of found occurences is printed to standard output
+in the tab separated values format and, when requested using *-o*, to a
+separate file. Piping is not really possible as this for example prints debug
+information about downloaded files. Hence the option *-o*.
+
+Many of the custom templates on the Project are based on a template called
+*Box*. This is the origin of the script's name.
+
+== Options
+-c <cache file>::
+Cache the downloaded information in the cache file. When the cache file
+already exists, no information is downloaded and the content of the cache file
+is used as information instead. To force a rebuild of the cache use the option
+*-r*. The cache is stored as a sqlite database.
+
+-r::
+Rebuild the cache. Only works in conjunction with the option *-c*.
+
+-o <filename>::
+Write the TeX-macros to _<filename>_. They will still be printed to the
+console.
+
+== Bugs
+If you find bugs, please report them at
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues.
