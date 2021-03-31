@@ -10,7 +10,7 @@ tex_macro_finder - find the TeX macros used in the Mathe fuer Nicht-Freaks
 project
 
 == Synopsis
-*python3 tex_macro_finder* [_options_]
+*python3 tex_macro_finder.py* [_options_]
 
 == Description
 The script tex_macro_finder searches all articles in the sitemap of the Mathe
@@ -19,10 +19,10 @@ the sitemap and all articles as raw WikiText linked there are downloaded or
 read from cache. For more information on caching see the option *-c* for
 details.
 
-After processing an unordered list of all used TeX macros is printed to
-standard output and, when requested using *-o*, to a separate file. Piping is
-not really possible as this for example prints debug information about
-downloaded files. Hence the option *-o*.
+After processing an alpherbetically sorted list of all used TeX macros is
+printed to standard output and, when requested using *-o*, to a separate
+file. Piping is not really possible as this for example prints debug
+information about downloaded files. Hence the option *-o*.
 
 == Options
 -c <cache file>::
