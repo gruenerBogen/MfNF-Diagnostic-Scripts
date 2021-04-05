@@ -128,8 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Cache file of the script
-cache.db
+# Cache files of the scripts
+*.db
 
 # Log file of the script
 bad_log.csv
