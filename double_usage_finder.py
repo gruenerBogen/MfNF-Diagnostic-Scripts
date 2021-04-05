@@ -65,7 +65,7 @@ def count_section_usages(string):
 
 def main():
     """Main program body."""
-    (opts_list, _) = getopt.getopt(sys.argv[1:], 'c:ro:')
+    (opts_list, _) = getopt.getopt(sys.argv[1:], 'c:r')
     opts = dict(opts_list)
 
     if '-c' in opts and os.path.isfile(opts['-c']) and '-r' not in opts:
