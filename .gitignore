@@ -134,6 +134,9 @@ cache.db
 # Log file of the script
 bad_log.csv
 
+# Script output
+out/
+
 # Ignore backup files
 *~
 
