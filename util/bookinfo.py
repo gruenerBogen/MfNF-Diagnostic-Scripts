@@ -10,7 +10,6 @@ from bs4 import BeautifulSoup
 EXCLUDED_HEADING_IDS = (
     'Buchanfänge',
     'Über_das_Projekt',
-    'Mitmachen_für_(Nicht-)Freaks'
 )
 
 

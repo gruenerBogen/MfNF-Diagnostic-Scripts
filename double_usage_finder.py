@@ -65,6 +65,11 @@ def count_section_usages(string):
 
 def main():
     """Main program body."""
+    bookinfo.EXCLUDED_HEADING_IDS = (
+        'Buchanfänge',
+        'Über_das_Projekt',
+        'Mitmachen_für_(Nicht-)Freaks',
+    )
     (opts_list, _) = getopt.getopt(sys.argv[1:], 'c:r')
     opts = dict(opts_list)
 
