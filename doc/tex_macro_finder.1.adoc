@@ -19,7 +19,7 @@ the sitemap and all articles as raw WikiText linked there are downloaded or
 read from cache. For more information on caching see the option *-c* for
 details.
 
-After processing an alpherbetically sorted list of all used TeX macros is
+After processing an alphabetically sorted list of all used TeX macros is
 printed to standard output and, when requested using *-o*, to a separate
 file. Piping is not really possible as this for example prints debug
 information about downloaded files. Hence the option *-o*.
