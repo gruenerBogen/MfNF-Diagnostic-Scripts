@@ -1,0 +1,35 @@
+= Contributing to MfNF-Diagnostic-Scripts
+
+If you want to contribute to this collection of diagnostic scripts, there are
+multiple ways to achieve this. If you cannot be bothered to read this, you can
+just create an issue or a pull request or do whatever you have been up to in
+order to contribute to this repository. However, if you want decrease the
+amount of time I spent on maintaining this repository (and in doing so the
+time your issue/pull request takes to be closed/merged), take a few moments to
+read and follow these notes.
+
+== I want to contribute code (i.e. pull request best practices)
+Awesome! Fork the repository, create a branch on your fork, write code, and
+create a https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/pulls[pull
+request] to merge it back to my repository. Ideally you should check the
+following points before creating the pull request:
+
+* Run https://pylint.org/[pylint] (with the default preferences) on what you
+  have written and eliminate everything it complains about.
+* Make sure all docstrings are accurate
+* When you add a script or change its behaviour, update the
+  link:README.adoc[README] and the manpage for the script. If there is no
+  manpage yet, create one.
+* Make sure you don't change the behaviour of all the other scripts
+  unintentionally. This point is especially important when you change anything
+  in the `util` folder.
+
+If you don't make this effort, I will have to make changes for all these
+points, which delays the merging process.
+
+== I want to contribute an issue/bug/idea ...
+Great! Just create an
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues[issue]. It
+would be fabulous if you write it elaborate enough such that others can
+understand what you are meaning. Especially for bugs: Try to say how to
+reproduce it.

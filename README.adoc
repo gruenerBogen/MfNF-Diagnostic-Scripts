@@ -28,3 +28,11 @@ information elsewhere, you should take a brief look at the documentation.
 == Where can I get more information on the scripts?
 Check the folder `doc`. You will find manpages for the individual scripts
 there.
+
+== I want to contribute something
+Awesome! If you have something to contribute (e.g. a bug, an idea, a
+diagnostic script, etc.), just create an
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues[issue] or a
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/pulls[pull
+request]. Ideally, take a look at link:CONTRIBUTING.adoc[CONTRIBUTING] before
+doing so.
