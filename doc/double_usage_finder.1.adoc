@@ -1,0 +1,51 @@
+= double_usage_finder(1)
+:version: v0.0.1
+:date: 05 April 2021
+:data-uri:
+:doctype: manpage
+:lang: en
+
+== Name
+double_usage_finder - find double used contents inside the Mathe fuer
+Nicht-Freaks project
+
+== Synopsis
+*python3 double_usage_finder.py* [_options_]
+
+== Description
+The script double_usage_finder searches all articles in the sitemap of the
+Mathe fuer Nicht-Freaks project for double use of contents. For this
+the sitemap and all articles as raw WikiText linked there are downloaded or
+read from cache. For more information on caching see the option *-c* for
+details.
+
+After processing the results are printed in the files _out/sections.txt_ and
+_section_usages.txt_. Additionally a compact summary of section usage is
+printed to the standard output. For more information on the generated files,
+see the section <<Files,FILES>>.
+
+== Options
+-c <cache file>::
+Cache the downloaded information in the cache file. When the cache file
+already exists, no information is downloaded and the content of the cache file
+is used as information instead. To force a rebuild of the cache use the option
+*-r*. The cache is stored as a sqlite database.
+
+-r::
+Rebuild the cache. Only works in conjunction with the option *-c*.
+
+== Files
+out/sections.txt::
+A list of the named sections that exist on the Mathe fuer Nicht-Freaks
+project. Each section is printed as +
+=*<section name>* > +
+*<section content>* +
+The individual sections are separated by a line of dashes (-).
+
+out/section_usages.txt::
+A list of articles and section names which use sections defined in other
+articles. The lines look as follows: *<article name>|<section name>*.
+
+== Bugs
+If you find bugs, please report them at
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues.
