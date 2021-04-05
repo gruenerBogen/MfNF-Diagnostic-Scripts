@@ -117,7 +117,7 @@ def fetch_pages_from_list(page_urls, action='view',
         match = existing_article_regex.match(url)
         if match is None:
             continue
-        print("Fetchning: {}".format(url))
+        print("Fetching: {}".format(url))
         with urllib.request.urlopen(
                 url_scheme.format(match.group(1), action)) as response:
             page = page_postprocessor(response.read())
