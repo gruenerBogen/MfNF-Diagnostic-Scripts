@@ -1,8 +1,10 @@
 """
-Module for finding the TeX macros used in the Mathe für Nicht-Freaks project.
+Module for analysing the double usage of content in the Mathe für Nicht-Freaks
+project.
 
-When run as a standalone script this performs all necessary steps for finding
-all TeX macros in the Mathe für Nicht-Freaks project.
+When run as a standalone script this performs all necessary steps for analysing
+all passages which are used multiple times across the Mathe für Nicht-Freaks
+project.
 """
 
 import os
@@ -23,31 +25,43 @@ def extract_sections(string):
         section_substrings.append(match.group(1))
     return section_substrings
 
+
 def count_sections(string):
+    """
+    Count the number of <section> environments in string.
+    """
     return string.count("<section begin")
+
 
 def detect_sections(string):
     """
     For debugging: Find first occurence of <section in string
-     and distance to next occurrence
+    and distance to next occurrence
     """
     first = string.find("<section")
-    if (first != -1):
+    if first != -1:
         print(first, string[first+1:].find("<section"))
     return []
 
+
 def extract_section_usages(string):
+    """
+    Extract all usages of sections from string and return the names of the used
+    sections (with multiplicities) as list.
+    """
     usage_regex = re.compile('{{#lst:(.+?)}}')
     usage_substrings = []
     for match in usage_regex.finditer(string):
         usage_substrings.append(match.group(1))
     return usage_substrings
 
+
 def count_section_usages(string):
     """
     Count how often the substring {{#lst: occurs
     """
     return string.count("{{#lst:")
+
 
 def main():
     """Main program body."""
@@ -83,14 +97,17 @@ def main():
 
     found_sections = list(sections)
     found_usages = list(usages)
-    print("Found {} marked sections with {} overall usages".format(section_counter, usage_counter))
+    print("Found {} marked sections with {} overall usages".format(
+        section_counter, usage_counter))
 
     os.makedirs("out", exist_ok=True)
     with open("out/sections.txt", 'w+') as file:
-        file.write('\n\n ______________________________________\n\n'.join(found_sections))
+        file.write('\n\n ______________________________________\n\n'.join(
+            found_sections))
     with open("out/section_usages.txt", 'w+') as file:
         file.write(str(usage_counter) + ' usages found:\n\n')
         file.write('\n'.join(found_usages))
+
 
 if __name__ == '__main__':
     main()
