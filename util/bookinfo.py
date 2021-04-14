@@ -3,9 +3,14 @@ Module for collection information about the articles which are in the book of
 the Mathe für Nicht-Freaks project.
 """
 import urllib.request
+import sys
+import os
+import getopt
 import re
 
 from bs4 import BeautifulSoup
+
+from . import site_caching
 
 EXCLUDED_HEADING_IDS = (
     'Buchanfänge',
@@ -123,3 +128,38 @@ def fetch_pages_from_list(page_urls, action='view',
             page = page_postprocessor(response.read())
             page_content[url] = page
     return page_content
+
+
+def book_argument_parser(extra_opts=''):
+    """
+    Parse the content for retrieving the books' contents. Currently the
+    following options will be parsed:
+
+    -c [cache file] cache file
+    -r rebuild chache
+
+    extra options can be provided via extra_opts as getiots string
+
+    return (books, pages, return of getopt.getopt)
+    """
+    (opts_list, arg_list) = getopt.getopt(sys.argv[1:], extra_opts + 'c:r')
+    opts = dict(opts_list)
+
+    if '-c' in opts and os.path.isfile(opts['-c']) and '-r' not in opts:
+        (books, pages) = site_caching.read_cached_data(cache=opts['-c'])
+    else:
+        books = fetch_article_list()
+        pages = {}
+        for book in books:
+            page_content = fetch_pages_from_list(
+                books[book], action='raw',
+                page_postprocessor=lambda byte_string:
+                byte_string.decode('utf-8'))
+            pages = {
+                **pages,
+                **page_content
+            }
+        if '-c' in opts:
+            site_caching.cache_page_data(books, pages, cache=opts['-c'])
+
+    return (books, pages, (opts_list, arg_list))

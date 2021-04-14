@@ -13,6 +13,8 @@ Currently there are the following diagnostic scripts:
    Nicht-Freaks project.
 * *double_usage_finder.py*: Analyse the double use of contents on the Mathe
    für Nicht-Freaks project.
+* *gallery_finder.py*: Analyse the usage of galleries on the Mathe für
+   Nicht-Freaks project.
 * *tex_macro_finder.py*: Collect a list of all TeX-macros used in math
   environments on the Mathe für Nicht-Freaks project.
 
