@@ -20,10 +20,7 @@ def extract_sections(string):
     Find all <section> environments and return their content as string array.
     """
     section_regex = re.compile('<section begin(.+?)<section end', re.DOTALL)
-    section_substrings = []
-    for match in section_regex.finditer(string):
-        section_substrings.append(match.group(1))
-    return section_substrings
+    return [match.group(1) for match in section_regex.finditer(string)]
 
 
 def count_sections(string):
