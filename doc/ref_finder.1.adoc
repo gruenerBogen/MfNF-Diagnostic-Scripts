@@ -1,0 +1,49 @@
+= ref_finder(1)
+:version: v0.0.1
+:date: 14 April 2021
+:data-uri:
+:doctype: manpage
+:lang: en
+
+== Name
+ref_finder - find all references inside the Mathe fuer
+Nicht-Freaks project
+
+== Synopsis
+*python3 ref_finder.py* [_options_]
+
+== Description
+The script ref_finder searches all articles in the sitemap of the
+Mathe fuer Nicht-Freaks project for references. For this
+the sitemap and all articles as raw WikiText linked there are downloaded or
+read from cache. For more information on caching see the option *-c* for
+details.
+
+After processing the results are printed in the files _out/ref_content.txt_ and
+_out/ref_stats.txt_. Additionally a compact summary of section usage is
+printed to the standard output. For more information on the generated files,
+see the section <<Files,FILES>>.
+
+== Options
+-c <cache file>::
+Cache the downloaded information in the cache file. When the cache file
+already exists, no information is downloaded and the content of the cache file
+is used as information instead. To force a rebuild of the cache use the option
+*-r*. The cache is stored as a sqlite database.
+
+-r::
+Rebuild the cache. Only works in conjunction with the option *-c*.
+
+== Files
+out/ref_content.txt::
+A list of the references' contents which the script found. The individual
+contents are separated by a line of dashes (-).
+
+out/ref_stats.txt::
+A list of articles which contain references together with the amount of
+references in it. The article link and the amount of references are separated by
+a TAB character.
+
+== Bugs
+If you find bugs, please report them at
+https://github.com/gruenerBogen/MfNF-Diagnostic-Scripts/issues.

@@ -15,6 +15,8 @@ Currently there are the following diagnostic scripts:
    für Nicht-Freaks project.
 * *gallery_finder.py*: Analyse the usage of galleries on the Mathe für
    Nicht-Freaks project.
+* *ref_finder.py*: Analyse the usage of references on the Mathe für
+   Nicht-Freaks project.
 * *tex_macro_finder.py*: Collect a list of all TeX-macros used in math
   environments on the Mathe für Nicht-Freaks project.
 
